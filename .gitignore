@@ -1,0 +1,26 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# cloudflare
+.wrangler/
+.dev.vars
+.dev.vars.*
+
+# environment / secrets — never commit, public repo
+.env
+.env.*
+!.env.example
+
+# claude design prototype — design reference, not built and not published
+Prototype/
+
+# logs
+*-debug.log*
+
+# os / editor
+.DS_Store
+.idea/

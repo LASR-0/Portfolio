@@ -1,0 +1,12 @@
+# pnpm 11 reads settings from here, not from package.json's "pnpm" field.
+# These packages have legitimate postinstall steps that fetch native binaries:
+#   esbuild  — Astro's bundler
+#   sharp    — image pipeline behind astro:assets (gallery)
+#   workerd  — Cloudflare's local runtime, used by wrangler dev
+allowBuilds:
+  esbuild: true
+  sharp: true
+  workerd: true
+minimumReleaseAgeExclude:
+  - miniflare@5.20260831.0-alpha
+  - wrangler@4.128.0

@@ -1,0 +1,27 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Luke Roxburgh — IT support and internal-tooling developer, Brisbane." } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={Astro.url.href} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <!-- Full metadata, OG image and JSON-LD land in commit 13 — plan.md §11.4 -->
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,77 @@
+/* ---------------------------------------------------------------------------
+   Base / reset. Ported from the prototype's <helmet> block, corrected.
+   --------------------------------------------------------------------------- */
+
+@import "@fontsource/chakra-petch/latin-600.css";
+@import "@fontsource/chakra-petch/latin-700.css";
+@import "@fontsource/jetbrains-mono/latin-400.css";
+@import "./tokens.css";
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  /* Lives on <html>, not the page wrapper: `overflow-x: hidden` there would
+     compute overflow-y to auto and break position:sticky. plan.md §10.11 */
+  overflow-x: clip;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: var(--font-mono);
+  font-size: var(--fs-body);
+  line-height: var(--lh-prose);
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+  margin: 0;
+}
+
+a { color: var(--ink); text-decoration: none; }
+a:hover { color: var(--vermilion); }
+
+::selection { background: var(--vermilion); color: var(--paper-2); }
+
+:focus-visible { outline: 2px solid var(--vermilion); outline-offset: 2px; }
+
+input, textarea, button, select { font: inherit; color: inherit; }
+
+img { max-width: 100%; height: auto; }
+
+/* Skip link — plan.md §11.5 */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: calc(var(--z-lightbox) + 1);
+  background: var(--paper-2);
+  border: var(--hairline) solid var(--ink);
+  padding: 10px 16px;
+  font-size: var(--fs-nav);
+}
+.skip-link:focus { left: var(--pad-x); top: 8px; }
+
+/* --- the one orchestrated load sequence, then nothing automatic ----------- */
+
+@keyframes ruleDown { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes riseIn   { from { opacity: 0; transform: translateY(10px); }
+                      to   { opacity: 1; transform: none; } }
+
+/* plan.md §11.3 — the prototype asserted this and never implemented it. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

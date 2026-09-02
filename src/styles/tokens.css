@@ -1,0 +1,87 @@
+/* ---------------------------------------------------------------------------
+   Design tokens — plan.md §4
+   Single source of truth. Nothing below this file should hard-code a hex,
+   a rule offset, or a z-index.
+   --------------------------------------------------------------------------- */
+
+:root {
+  /* --- colour ------------------------------------------------------------ */
+  --paper:      #EAE7DE;  /* page base */
+  --paper-2:    #F2F0EA;  /* card and cell fills */
+  --ink:        #171614;  /* all text — warm near-black, never #000 */
+  --rule:       #C4BFB2;  /* every hairline, grid line, registration mark */
+  --vermilion:  #E8452B;  /* the single accent — max 3 per viewport */
+  --graphite:   #5C5850;  /* secondary and meta text only */
+
+  /* `rule` draws lines. `graphite` writes words. See plan.md §11.6 —
+     --rule as a text colour measures ~1.5:1 and fails WCAG at every size. */
+
+  /* heatmap intensity ramp */
+  --heat-0: #F2F0EA;
+  --heat-1: #F6C9C0;
+  --heat-2: #F09480;
+  --heat-3: #EC6A4F;
+  --heat-4: #E8452B;
+
+  /* --- the measured system ----------------------------------------------- */
+  /* Interior rule offsets. Referenced by both the rule-band primitive and any
+     layout that aligns to them (Work grid, footer). Never hard-code twice. */
+  --rule-left:  25%;
+  --rule-right: 75%;
+
+  --container:    1440px;
+  --pad-x:        32px;   /* section horizontal padding */
+  --hairline:     1px;
+  --reg-inset:    8px;    /* ✕ registration mark inset from section corner */
+
+  /* --- type -------------------------------------------------------------- */
+  --font-display: "Chakra Petch", ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --fs-hero:      clamp(72px, 15.5vw, 224px);
+  --fs-section:   112px;  /* overridden at breakpoints — plan.md §11.1 */
+  --fs-card:      34px;
+  --fs-body:      15px;
+  --fs-prose:     13px;
+  --fs-nav:       13px;
+  --fs-meta:      11px;
+  --fs-label:     10px;
+
+  --lh-display:   0.9;
+  --lh-card:      0.95;
+  --lh-prose:     1.7;
+  --ls-display:   -0.03em;
+  --ls-label:     0.04em;
+
+  --measure:      55ch;   /* prose cap. Longer than 4 lines means the copy is wrong. */
+
+  /* --- layering — plan.md §10.8, §10.11 ----------------------------------- */
+  --z-band-rule:  1;      /* interior rules, within a band's stacking context */
+  --z-raised:     2;      /* components that sit above the rules */
+  --z-header:     10;     /* sticky header: above content, below both modals */
+  --z-scrim:      20;
+  --z-drawer:     21;
+  --z-lightbox:   30;
+
+  /* --- motion — one load sequence, then nothing automatic ---------------- */
+  --dur-rule:     0.7s;
+  --dur-rise:     0.7s;
+  --ease:         ease-out;
+}
+
+@media (max-width: 1024px) {
+  :root { --fs-section: 72px; }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --fs-section: 56px;
+    --pad-x: 20px;
+    /* Interior rules are dropped below tablet — plan.md §11.1. There is no
+       room for a three-column measured system at this width. */
+  }
+}
+
+@media (max-width: 420px) {
+  :root { --fs-section: 44px; }
+}
