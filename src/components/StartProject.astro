@@ -1,0 +1,29 @@
+---
+import RuleBand from "./RuleBand.astro";
+import RegMarks from "./RegMarks.astro";
+import SectionHead from "./SectionHead.astro";
+import EnquiryForm from "./EnquiryForm.tsx";
+---
+
+<section class="section" id="start">
+  <RegMarks corners={["tl", "tr"]} />
+
+  {/* Title band renders outer rules only — plan.md §10.7 */}
+  <RuleBand rules="none">
+    <SectionHead title="Start a project.">
+      <div class="form-rev">FORM 01 / REV A</div>
+    </SectionHead>
+  </RuleBand>
+
+  {/* The form band KEEPS its rules; the form is raised above them instead. */}
+  <RuleBand>
+    <div class="sp">
+      <EnquiryForm client:visible />
+    </div>
+  </RuleBand>
+</section>
+
+<style>
+  .form-rev { font-size: var(--fs-meta); color: var(--graphite); margin-bottom: 12px; }
+  .sp { border-top: var(--hairline) solid var(--rule); padding: 36px var(--pad-x) 64px; }
+</style>

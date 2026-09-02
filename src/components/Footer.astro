@@ -1,0 +1,57 @@
+---
+import RegMarks from "./RegMarks.astro";
+import RuleBand from "./RuleBand.astro";
+
+/* repeat(4,1fr): cell borders land at 25/50/75, so two of them now carry the
+   interior rules exactly. At 33.3/66.6 they never aligned. plan.md §10.1 */
+
+const cells = [
+  { lbl: "EMAIL",    val: "TODO — pending domain", href: null },
+  { lbl: "GITHUB",   val: "LASR-0", href: "https://github.com/LASR-0" },
+  { lbl: "LINKEDIN", val: "TODO — pending URL", href: null },
+  { lbl: "LOCATION", val: "Brisbane, Australia", href: null },
+];
+---
+
+<footer class="ftr">
+  <RegMarks corners={["bl", "br"]} />
+  <RuleBand>
+    <div class="ftr__grid">
+      {cells.map((c) => {
+        const Tag = c.href ? "a" : "div";
+        return (
+          <Tag class="ftr__cell" href={c.href ?? undefined}>
+            <div class="ftr__lbl">{c.lbl}</div>
+            <div class:list={["ftr__val", !c.href && c.val.startsWith("TODO") && "ftr__val--todo"]}>{c.val}</div>
+          </Tag>
+        );
+      })}
+    </div>
+    <div class="ftr__base">
+      <span>LUKE ROXBURGH — PORTFOLIO</span><span>SHEET 01 / REV A</span>
+    </div>
+  </RuleBand>
+</footer>
+
+<style>
+  .ftr { position: relative; }
+  .ftr__grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+  .ftr__cell { padding: 28px 24px; border-right: var(--hairline) solid var(--rule); display: block; }
+  .ftr__cell:last-child { border-right: 0; }
+  .ftr__lbl { font-size: var(--fs-label); color: var(--graphite); letter-spacing: var(--ls-label); }
+  .ftr__val { font-size: 14px; margin-top: 8px; }
+  .ftr__val--todo { color: var(--graphite); }
+  .ftr__base {
+    border-top: var(--hairline) solid var(--rule);
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--fs-label);
+    color: var(--graphite);
+  }
+  @media (max-width: 700px) {
+    .ftr__grid { grid-template-columns: 1fr 1fr; }
+    .ftr__cell:nth-child(2n) { border-right: 0; }
+    .ftr__cell:nth-child(-n+2) { border-bottom: var(--hairline) solid var(--rule); }
+  }
+</style>

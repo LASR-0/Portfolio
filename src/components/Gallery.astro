@@ -1,0 +1,76 @@
+---
+import RuleBand from "./RuleBand.astro";
+import RegMarks from "./RegMarks.astro";
+import SectionHead from "./SectionHead.astro";
+import { art } from "../data/art";
+
+/* No number — Gallery is not sequential. No vermilion anywhere in this
+   section: the art brings its own colour. plan.md §3, §12 */
+---
+
+<section class="section" id="gallery">
+  <RegMarks corners={["tl", "bl"]} />
+
+  <RuleBand rules="none">
+    <SectionHead title="Gallery.">
+      <p class="sechead__aside">Painting and drawing, digital.</p>
+    </SectionHead>
+  </RuleBand>
+
+  <RuleBand>
+    <div class="gal">
+      {art.map((a, i) => (
+        /* Non-interactive for now. These become links to the dedicated gallery
+           page once it is designed; until that exists a clickable tile with
+           nowhere to go is a dead control. Raised above the rules — a columns
+           layout, so stacking here is worth watching. plan.md §10.8 */
+        <figure class="tile raised" data-art={i}>
+          <div class="tile__frame" style={`height:${a.h}`}>
+            <span class="tile__slot">art {String(i + 1).padStart(2, "0")}</span>
+          </div>
+          <figcaption class="tile__meta"><span>{a.title}</span><span>{a.year}</span></figcaption>
+        </figure>
+      ))}
+    </div>
+  </RuleBand>
+</section>
+
+<style>
+  .sechead__aside { margin: 0 0 10px; max-width: 40ch; font-size: 14px; color: var(--graphite); }
+
+  .gal {
+    border-top: var(--hairline) solid var(--rule);
+    padding: 32px var(--pad-x);
+    columns: 4;
+    column-gap: 20px;
+  }
+  .tile {
+    display: block;
+    width: 100%;
+    margin: 0 0 20px;
+    padding: 0;
+    border: var(--hairline) solid var(--rule);
+    background: var(--paper-2);
+    break-inside: avoid;
+    text-align: left;
+  }
+  .tile__frame {
+    background-image: repeating-linear-gradient(135deg, transparent 0 7px, rgba(196,191,178,.5) 7px 8px);
+    display: flex;
+    align-items: flex-end;
+    padding: 10px;
+  }
+  .tile__slot { font-size: var(--fs-label); color: var(--graphite); }
+  .tile__meta {
+    border-top: var(--hairline) solid var(--rule);
+    padding: 9px 10px;
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--fs-meta);
+    color: var(--graphite);
+  }
+
+  @media (max-width: 1180px) { .gal { columns: 3; } }
+  @media (max-width: 900px)  { .gal { columns: 2; } }
+  @media (max-width: 560px)  { .gal { columns: 1; } }
+</style>

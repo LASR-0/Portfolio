@@ -40,7 +40,10 @@ const links = [
     </nav>
   </details>
 
-  <a class="hdr__cta" href="#start">START A PROJECT</a>
+  <a class="hdr__cta" href="#start">
+    <span class="hdr__cta-long">START A PROJECT</span>
+    <span class="hdr__cta-short">START</span>
+  </a>
 </header>
 
 <style>
@@ -93,6 +96,7 @@ const links = [
   }
   /* Rebuilt as real CSS — every style-hover in the prototype was dead. §9 */
   .hdr__cta:hover { background: var(--paper); color: var(--vermilion); }
+  .hdr__cta-short { display: none; }
 
   .hdr__menu { display: none; }
   .hdr__menu summary {
@@ -127,5 +131,14 @@ const links = [
   @media (max-width: 900px) {
     .hdr__nav { display: none; }
     .hdr__menu { display: block; }
+  }
+  /* At 375 the row was name + MENU + a 15-character CTA against 20px padding,
+     which overflowed and overlapped. Tighten the gap and shorten the label
+     rather than dropping the primary action. plan.md §10.12 */
+  @media (max-width: 560px) {
+    .hdr { gap: 12px; }
+    .hdr__cta { padding: 8px 12px; }
+    .hdr__cta-long { display: none; }
+    .hdr__cta-short { display: inline; }
   }
 </style>

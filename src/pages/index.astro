@@ -3,10 +3,18 @@ import Base from "../layouts/Base.astro";
 import Header from "../components/Header.astro";
 import Hero from "../components/Hero.astro";
 import Work from "../components/Work.astro";
+import Experience from "../components/Experience.astro";
+import Activity from "../components/Activity.astro";
+import Gallery from "../components/Gallery.astro";
+import Hobbies from "../components/Hobbies.astro";
+import StartProject from "../components/StartProject.astro";
+import Footer from "../components/Footer.astro";
 ---
 
 <Base title="Luke Roxburgh — IT support and internal-tooling developer">
   <div class="sheet">
+    {/* The two OUTER rules: page-level and continuous, and the only ones that
+        animate in. Interior rules are drawn per band. plan.md §10.0 */}
     <span class="sheet__rule sheet__rule--start" aria-hidden="true"></span>
     <span class="sheet__rule sheet__rule--end" aria-hidden="true"></span>
 
@@ -14,6 +22,12 @@ import Work from "../components/Work.astro";
     <main id="main">
       <Hero />
       <Work />
+      <Experience />
+      <Activity />
+      <Gallery />
+      <Hobbies />
+      <StartProject />
     </main>
+    <Footer />
   </div>
 </Base>

@@ -84,7 +84,13 @@ img { max-width: 100%; height: auto; }
   position: relative;
   max-width: var(--container);
   margin: 0 auto;
+  /* Keeps the footer at the bottom on short pages — a thin case study left it
+     floating mid-viewport with bare paper beneath. */
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
 }
+.sheet > main { flex: 1; }
 
 /* The two OUTER rules stay page-level and continuous, and keep the staggered
    load animation. Only these animate; band rules never do. */
@@ -164,4 +170,100 @@ img { max-width: 100%; height: auto; }
      registration marks stay. plan.md §11.1 */
   .band__rule { display: none; }
   .sechead { flex-direction: column; align-items: flex-start; gap: 18px; }
+}
+
+/* Rendered by the HeroField React island, so it cannot live in Hero.astro's
+   scoped style block — Astro scopes styles to elements in its own template and
+   an island's DOM never receives the scoping attribute. Island-facing styles
+   belong here. */
+.hero__field {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  /* --rule, not --graphite: the field is decorative construction texture, not
+     text. At graphite it competed with the lockup sitting over it and the
+     subline became unreadable. This is the "rule draws lines" rule (§11.6)
+     applying to the field itself. */
+  color: var(--rule);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 13px;
+  white-space: pre;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Enquiry form. Rendered by a React island, so these cannot live in
+   StartProject.astro's scoped block — see the note on .hero__field.
+   --------------------------------------------------------------------------- */
+
+.form { max-width: 1040px; margin: 0 auto; }
+.form__box { border: var(--hairline) solid var(--ink); background: var(--paper-2); }
+.form__row { display: grid; grid-template-columns: 1fr 1fr; border-bottom: var(--hairline) solid var(--ink); }
+.form__row .field:first-child { border-right: var(--hairline) solid var(--ink); }
+
+.field { display: block; padding: 14px 16px 16px; border: 0; margin: 0; min-width: 0; }
+.field--full { border-bottom: var(--hairline) solid var(--ink); }
+.field--last { border-bottom: 0; }
+.field__lbl {
+  display: block;
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label);
+  color: var(--graphite);
+  padding: 0;
+}
+.field input[type="text"], .field input[type="email"], .field textarea {
+  width: 100%;
+  margin-top: 9px;
+  border: 0;
+  background: transparent;
+  font-size: var(--fs-body);
+  outline: none;
+}
+.field textarea { line-height: var(--lh-prose); resize: vertical; }
+/* Invalid fields are marked with a rule under the control, not a colour swap —
+   colour alone is not an accessible error signal. */
+.field--invalid input, .field--invalid textarea { border-bottom: var(--hairline) solid var(--vermilion); }
+.field__err { display: block; margin-top: 8px; font-size: var(--fs-meta); color: var(--ink); }
+
+.seg { display: flex; margin-top: 11px; border: var(--hairline) solid var(--rule); width: fit-content; flex-wrap: wrap; }
+.seg__opt { position: relative; }
+.seg__opt input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.seg__opt span { display: block; padding: 9px 16px; font-size: 12px; border-right: var(--hairline) solid var(--rule); }
+.seg__opt:last-child span { border-right: 0; }
+.seg__opt input:checked + span { background: var(--ink); color: var(--paper-2); }
+.seg__opt input:focus-visible + span { outline: 2px solid var(--vermilion); outline-offset: -2px; }
+
+.scope { position: relative; margin-top: 24px; max-width: 620px; }
+.scope__track { height: var(--hairline); background: var(--rule); }
+.scope__ticks { display: flex; justify-content: space-between; margin-top: -1px; }
+.scope__ticks span { width: var(--hairline); height: 9px; background: var(--rule); display: block; }
+.scope__input { position: absolute; top: -10px; left: 0; width: 100%; height: 22px; opacity: 0; cursor: pointer; margin: 0; }
+.scope__handle { position: absolute; top: -6px; margin-left: -6px; width: 13px; height: 13px; background: var(--ink); }
+.scope__value { margin-top: 18px; font-size: var(--fs-prose); }
+.scope__labels { display: flex; justify-content: space-between; margin-top: 12px; font-size: var(--fs-label); color: var(--graphite); }
+
+.form__actions { display: flex; align-items: center; gap: 22px; margin-top: 22px; max-width: 1040px; margin-left: auto; margin-right: auto; }
+.btn-solid {
+  border: var(--hairline) solid var(--vermilion);
+  background: var(--vermilion);
+  color: var(--paper-2);
+  padding: 15px 34px;
+  font-size: 14px;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+}
+.btn-solid:hover:not(:disabled) { background: var(--paper); color: var(--vermilion); }
+.btn-solid:disabled { opacity: 0.55; cursor: default; }
+
+.form__status { font-size: var(--fs-prose); }
+.form__sent { border: var(--hairline) solid var(--ink); background: var(--paper-2); padding: 56px var(--pad-x); max-width: 1040px; margin: 0 auto; }
+.form__sent h3 { font-family: var(--font-display); font-weight: 600; font-size: 42px; letter-spacing: var(--ls-display); line-height: 1; }
+.form__sent p { margin: 16px 0 0; max-width: var(--measure); font-size: 14px; color: var(--graphite); }
+
+@media (max-width: 700px) {
+  .form__row { grid-template-columns: 1fr; }
+  .form__row .field:first-child { border-right: 0; border-bottom: var(--hairline) solid var(--ink); }
 }

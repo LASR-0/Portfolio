@@ -16,7 +16,7 @@ const projects = (await getCollection("projects", ({ data }) => !data.draft))
 <section class="section" id="work">
   <RegMarks corners={["tl", "tr"]} />
 
-  <RuleBand>
+  <RuleBand rules="none">
     <SectionHead num="01" title="Work.">
       <p class="sechead__aside prose">
         Internal tools for a 300-user org, plus the things I build for myself.
@@ -41,7 +41,7 @@ const projects = (await getCollection("projects", ({ data }) => !data.draft))
 
   .sechead__aside {
     margin: 0 0 10px;
-    max-width: 46ch;
+    max-width: 42ch;
     font-size: 14px;
     color: var(--graphite);
   }

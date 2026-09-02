@@ -1,0 +1,82 @@
+---
+import { getCollection, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import RuleBand from "../../components/RuleBand.astro";
+
+/* A real, crawlable page — not just drawer state. The drawer opens the same
+   content on in-page nav and pushes this URL; direct hits, crawlers and pasted
+   links get this. Its richer template is deferred; the plumbing is not,
+   because that is the part that is expensive to retrofit. plan.md §5, §14 */
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects", ({ data }) => !data.draft);
+  return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
+}
+
+const { project } = Astro.props;
+const p = project.data;
+const { Content } = await render(project);
+---
+
+<Base title={`${p.name} — Luke Roxburgh`} description={p.blurb}>
+  <div class="sheet">
+    <span class="sheet__rule sheet__rule--start" aria-hidden="true"></span>
+    <span class="sheet__rule sheet__rule--end" aria-hidden="true"></span>
+
+    <Header />
+    <main id="main">
+      <article class="section">
+        <RuleBand rules="none">
+          <div class="case__head">
+            <a class="case__back" href="/#work">← Work</a>
+            <h1 class="case__title">{p.name}</h1>
+          </div>
+        </RuleBand>
+
+        <RuleBand>
+          <div class="case__cells">
+            <div class="case__cell"><span class="lbl">STACK</span><span class="val">{p.stack}</span></div>
+            <div class="case__cell"><span class="lbl">ROLE</span><span class="val">{p.role}</span></div>
+            <div class="case__cell"><span class="lbl">YEAR</span><span class="val">{p.year}</span></div>
+            <div class="case__cell">
+              <span class="lbl">SOURCE</span>
+              <span class="val">
+                {p.repo ? <a href={p.repo}>{p.repo.replace("https://github.com/", "")}</a> : "Private repo"}
+              </span>
+            </div>
+          </div>
+        </RuleBand>
+
+        <RuleBand rules="none">
+          <div class="case__body prose"><Content /></div>
+        </RuleBand>
+      </article>
+    </main>
+    <Footer />
+  </div>
+</Base>
+
+<style>
+  .case__head { padding: 56px var(--pad-x) 36px; }
+  .case__back { font-size: var(--fs-meta); color: var(--graphite); }
+  .case__back:hover { color: var(--vermilion); }
+  .case__title { font-weight: 600; font-size: var(--fs-section); margin-top: 18px; }
+
+  .case__cells {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: var(--hairline) solid var(--rule);
+    border-bottom: var(--hairline) solid var(--rule);
+  }
+  .case__cell { padding: 12px 16px; border-right: var(--hairline) solid var(--rule); min-width: 0; }
+  .case__cell:last-child { border-right: 0; }
+  .lbl { display: block; font-size: var(--fs-label); color: var(--graphite); letter-spacing: var(--ls-label); }
+  .val { display: block; font-size: 14px; margin-top: 5px; overflow-wrap: anywhere; }
+
+  .case__body { padding: 40px var(--pad-x) 80px; }
+  .case__body :global(p) { margin: 0 0 22px; max-width: var(--measure); }
+
+  @media (max-width: 700px) { .case__cells { grid-template-columns: 1fr 1fr; } }
+</style>

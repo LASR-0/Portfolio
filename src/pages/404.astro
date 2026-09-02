@@ -1,0 +1,43 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import RuleBand from "../components/RuleBand.astro";
+import RegMarks from "../components/RegMarks.astro";
+---
+
+<Base title="Sheet not found — Luke Roxburgh" description="That page does not exist.">
+  <div class="sheet">
+    <span class="sheet__rule sheet__rule--start" aria-hidden="true"></span>
+    <span class="sheet__rule sheet__rule--end" aria-hidden="true"></span>
+
+    <Header />
+    <main id="main">
+      <section class="section nf">
+        <RegMarks corners={["tl", "tr", "bl", "br"]} />
+        <RuleBand rules="none">
+          <div class="nf__body">
+            <div class="nf__code">ERR 404</div>
+            <h1 class="nf__title">Sheet not found.</h1>
+            <p class="nf__note">
+              This drawing does not exist, or it was revised out. The rest of the
+              set is intact.
+            </p>
+            <a class="nf__back" href="/">← Back to sheet 01</a>
+          </div>
+        </RuleBand>
+      </section>
+    </main>
+    <Footer />
+  </div>
+</Base>
+
+<style>
+  .nf { display: flex; align-items: center; min-height: 60vh; }
+  .nf__body { padding: 80px var(--pad-x); }
+  .nf__code { font-size: var(--fs-meta); color: var(--graphite); letter-spacing: var(--ls-label); }
+  .nf__title { font-weight: 600; font-size: var(--fs-section); margin-top: 16px; }
+  .nf__note { max-width: var(--measure); color: var(--graphite); margin: 24px 0 0; }
+  .nf__back { display: inline-block; margin-top: 28px; font-size: var(--fs-prose); }
+  .nf__back:hover { color: var(--vermilion); }
+</style>

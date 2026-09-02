@@ -1,0 +1,53 @@
+---
+import RuleBand from "./RuleBand.astro";
+import RegMarks from "./RegMarks.astro";
+import SectionHead from "./SectionHead.astro";
+
+/* Every band here renders outer rules only — title and both content bands.
+   Rules resume in the next section. plan.md §10.6 */
+---
+
+<section class="section" id="hobbies">
+  <RegMarks corners={["tr"]} />
+
+  <RuleBand rules="none">
+    <SectionHead title="Hobbies." />
+  </RuleBand>
+
+  <RuleBand rules="none">
+    <div class="hob">
+      <div class="hob__col">
+        <p class="prose">
+          I paint and draw digitally. It is the only thing I do that has no
+          ticket attached to it and no one waiting on it.
+        </p>
+        <p class="prose hob__draft">
+          Draft copy — send me two or three real paragraphs and I will set them
+          here verbatim.
+        </p>
+      </div>
+      <div class="hob__col hob__col--offset">
+        <p class="prose">
+          The grow tent that Canopy controls started as an excuse to put sensors
+          on something and read the numbers back.
+        </p>
+        <p class="prose hob__draft">Second slot, same deal. Specific beats broad here.</p>
+      </div>
+    </div>
+  </RuleBand>
+</section>
+
+<style>
+  .hob { display: grid; grid-template-columns: 1fr 1fr; border-top: var(--hairline) solid var(--rule); }
+  .hob__col { padding: 40px var(--pad-x) 64px; border-right: var(--hairline) solid var(--rule); }
+  .hob__col--offset { padding-top: 120px; border-right: 0; }
+  .hob__col p { margin: 0; }
+  .hob__col p + p { margin-top: 26px; }
+  .hob__draft { color: var(--graphite); }
+
+  @media (max-width: 900px) {
+    .hob { grid-template-columns: 1fr; }
+    .hob__col { border-right: 0; }
+    .hob__col--offset { padding-top: 0; border-top: var(--hairline) solid var(--rule); }
+  }
+</style>

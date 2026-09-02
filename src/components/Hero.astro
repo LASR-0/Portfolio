@@ -1,15 +1,15 @@
 ---
 import RegMarks from "./RegMarks.astro";
+import HeroField from "./HeroField.tsx";
 
-/* The ASCII field hydrates as an island in a later commit (plan.md §11.2 —
-   it needs IntersectionObserver + visibilitychange pausing and a 30fps cap
-   before it goes anywhere near a phone). The <pre> is aria-hidden and the
-   lockup reads fine without it. */
+/* client:load rather than client:visible — the hero is above the fold and the
+   field is part of the load sequence, so deferring it would show an empty
+   panel first. It is the only island on the page that loads eagerly. */
 ---
 
 <section class="hero">
   <RegMarks corners={["tl", "tr", "bl", "br"]} />
-  <pre class="hero__field" aria-hidden="true" data-ascii-field></pre>
+  <HeroField client:load />
   <div class="hero__lockup">
     <h1 class="hero__name">Luke Roxburgh</h1>
     <p class="hero__line">Placeholder mono line for now.</p>
@@ -25,20 +25,6 @@ import RegMarks from "./RegMarks.astro";
     min-height: 620px;
     border-bottom: var(--hairline) solid var(--rule);
     overflow: hidden;
-  }
-
-  .hero__field {
-    position: absolute;
-    inset: 0;
-    margin: 0;
-    padding: 0;
-    color: var(--graphite);
-    font-family: var(--font-mono);
-    font-size: 13px;
-    line-height: 13px;
-    white-space: pre;
-    overflow: hidden;
-    user-select: none;
   }
 
   .hero__lockup {
