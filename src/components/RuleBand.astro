@@ -1,0 +1,29 @@
+---
+/* The rule-band primitive — plan.md §10.0.
+   A horizontal band of content that draws its own interior rules, spanning
+   only its own height. A band opts out by rendering none, which produces the
+   deliberate gap. Slotted content defaults to z-index:auto and therefore
+   paints BELOW the rules; anything that must sit above gets class="raised".
+
+   Bands are finer-grained than sections: several sections drop rules from
+   their title band while keeping them in the content band below, so band
+   boundaries follow the horizontal hairlines, not the <section> tags. */
+
+interface Props {
+  rules?: "both" | "left" | "right" | "none";
+  id?: string;
+}
+
+/* Deliberately no `class` prop. Astro scopes styles to the component that
+   declares them, so a layout class passed in from a parent never matches and
+   fails silently. Put the layout element inside the slot instead. */
+const { rules = "both", id } = Astro.props;
+const left = rules === "both" || rules === "left";
+const right = rules === "both" || rules === "right";
+---
+
+<div class="band" id={id}>
+  {left && <span class="band__rule band__rule--left" aria-hidden="true"></span>}
+  {right && <span class="band__rule band__rule--right" aria-hidden="true"></span>}
+  <slot />
+</div>

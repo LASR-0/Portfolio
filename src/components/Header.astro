@@ -1,0 +1,131 @@
+---
+/* Sticky header — plan.md §10.11, §10.12.
+   Three traps, all handled here:
+   1. overflow-x:clip lives on <html> (global.css), never on a wrapper — the
+      hidden variant computes overflow-y to auto and breaks position:sticky.
+   2. z-index sits at --z-header (10): above content and rules, below the
+      drawer (20/21) and lightbox (30).
+   3. The opaque background would eat the page-level outer rules and sever the
+      drafting grid at the top of the viewport, so the header draws its own
+      rule segments at all four offsets. */
+
+const links = [
+  { href: "#work", label: "Work" },
+  { href: "#experience", label: "Experience" },
+  { href: "#activity", label: "Activity" },
+  { href: "#gallery", label: "Gallery" },
+  { href: "#hobbies", label: "Hobbies" },
+];
+---
+
+<header class="hdr">
+  <span class="hdr__rule hdr__rule--start" aria-hidden="true"></span>
+  <span class="hdr__rule hdr__rule--left" aria-hidden="true"></span>
+  <span class="hdr__rule hdr__rule--right" aria-hidden="true"></span>
+  <span class="hdr__rule hdr__rule--end" aria-hidden="true"></span>
+
+  <div class="hdr__mark">
+    <span class="hdr__name">L.ROXBURGH</span>
+    <span class="hdr__meta">BNE / UTC+10</span>
+  </div>
+
+  <nav class="hdr__nav" aria-label="Sections">
+    {links.map((l) => <a href={l.href}>{l.label}</a>)}
+  </nav>
+
+  <details class="hdr__menu">
+    <summary aria-label="Menu">MENU</summary>
+    <nav class="hdr__drawer" aria-label="Sections">
+      {links.map((l) => <a href={l.href}>{l.label}</a>)}
+    </nav>
+  </details>
+
+  <a class="hdr__cta" href="#start">START A PROJECT</a>
+</header>
+
+<style>
+  .hdr {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-header);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    height: var(--header-h);
+    padding: 0 var(--pad-x);
+    background: var(--paper);
+    border-bottom: var(--hairline) solid var(--rule);
+  }
+
+  .hdr__rule {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: var(--hairline);
+    background: var(--rule);
+    pointer-events: none;
+  }
+  .hdr__rule--start { left: 0; }
+  .hdr__rule--left  { left: calc(var(--rule-left) - 1px); }
+  .hdr__rule--right { left: calc(var(--rule-right) - 1px); }
+  .hdr__rule--end   { right: 0; }
+
+  .hdr__mark { display: flex; align-items: baseline; gap: 14px; flex-shrink: 0; }
+  .hdr__name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: -0.02em;
+  }
+  .hdr__meta { font-size: var(--fs-label); color: var(--graphite); }
+
+  .hdr__nav { display: flex; gap: 28px; font-size: var(--fs-nav); min-width: 0; }
+
+  .hdr__cta {
+    flex-shrink: 0;
+    border: var(--hairline) solid var(--vermilion);
+    background: var(--vermilion);
+    color: var(--paper-2);
+    padding: 8px 16px;
+    font-size: 12px;
+    letter-spacing: 0.02em;
+  }
+  /* Rebuilt as real CSS — every style-hover in the prototype was dead. §9 */
+  .hdr__cta:hover { background: var(--paper); color: var(--vermilion); }
+
+  .hdr__menu { display: none; }
+  .hdr__menu summary {
+    list-style: none;
+    cursor: pointer;
+    border: var(--hairline) solid var(--rule);
+    padding: 7px 14px;
+    font-size: 12px;
+  }
+  .hdr__menu summary::-webkit-details-marker { display: none; }
+  .hdr__menu summary:hover { border-color: var(--ink); }
+  .hdr__drawer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--paper);
+    border-bottom: var(--hairline) solid var(--rule);
+  }
+  .hdr__drawer a {
+    height: var(--header-h);
+    padding: 0 var(--pad-x);
+    border-top: var(--hairline) solid var(--rule);
+    font-size: var(--fs-nav);
+  }
+
+  /* Hold the row rather than letting it overflow — §10.12 */
+  @media (max-width: 1180px) { .hdr__nav { gap: 20px; } }
+  @media (max-width: 1040px) { .hdr__meta { display: none; } }
+  @media (max-width: 900px) {
+    .hdr__nav { display: none; }
+    .hdr__menu { display: block; }
+  }
+</style>

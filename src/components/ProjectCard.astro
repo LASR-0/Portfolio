@@ -1,0 +1,131 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props { project: CollectionEntry<"projects">; }
+const { project } = Astro.props;
+const p = project.data;
+---
+
+<article class="card">
+  <div class="card__head">
+    <span class="card__kind">{p.kind}</span>
+    <span class:list={["card__status", p.live && "card__status--live"]}>
+      {p.live && <span class="card__dot" aria-hidden="true"></span>}
+      {p.status}
+    </span>
+  </div>
+
+  <div class="card__body">
+    <h3 class="card__title">{p.name}</h3>
+    <p class="card__blurb">{p.blurb}</p>
+  </div>
+
+  <div class="card__cells">
+    <div class="card__cell"><span class="lbl">STACK</span><span class="val">{p.stack}</span></div>
+    <div class="card__cell"><span class="lbl">ROLE</span><span class="val">{p.role}</span></div>
+  </div>
+
+  <div class="card__cells card__cells--foot">
+    <div class="card__cell"><span class="lbl">YEAR</span><span class="val">{p.year}</span></div>
+    <div class="card__cell"><span class="lbl">{p.metricLabel}</span><span class="val">{p.metric}</span></div>
+    <a class="card__open" href={`/work/${project.id}`} aria-label={`Open case study for ${p.name}`}>→</a>
+  </div>
+</article>
+
+<style>
+  .card {
+    border-right: var(--hairline) solid var(--rule);
+    border-bottom: var(--hairline) solid var(--rule);
+    background: var(--paper-2);
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .card__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 16px;
+    border-bottom: var(--hairline) solid var(--rule);
+  }
+  .card__kind {
+    border: var(--hairline) solid var(--rule);
+    padding: 3px 8px;
+    font-size: var(--fs-label);
+    letter-spacing: var(--ls-label);
+    color: var(--graphite);
+    white-space: nowrap;
+  }
+  .card__status {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: var(--fs-label);
+    color: var(--graphite);
+    white-space: nowrap;
+  }
+  .card__status--live { color: var(--ink); }
+  /* The only vermilion in the Work section — one dot, on genuinely
+     in-production work. plan.md §4, max 3 per viewport. */
+  .card__dot { width: 6px; height: 6px; background: var(--vermilion); display: block; }
+
+  .card__body { padding: 26px 16px 44px; min-height: 150px; }
+  .card__title {
+    font-weight: 600;
+    font-size: var(--fs-card);
+    line-height: var(--lh-card);
+    /* 34px display type in a ~360px column: break rather than overflow. */
+    overflow-wrap: anywhere;
+  }
+  .card__blurb {
+    margin: 14px 0 0;
+    font-size: var(--fs-prose);
+    color: var(--graphite);
+    text-wrap: pretty;
+  }
+
+  .card__cells {
+    margin-top: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: var(--hairline) solid var(--rule);
+  }
+  .card__cells--foot { margin-top: 0; grid-template-columns: 1fr 1fr 62px; }
+  .card__cell {
+    padding: 11px 16px;
+    border-right: var(--hairline) solid var(--rule);
+    min-width: 0;
+  }
+  .card__cells--foot .card__cell:nth-child(2) { border-right: var(--hairline) solid var(--rule); }
+  .card__cell:last-child { border-right: 0; }
+
+  .lbl {
+    display: block;
+    font-size: var(--fs-label);
+    color: var(--graphite);
+    letter-spacing: var(--ls-label);
+  }
+  /* At 4 columns these cells are ~148px, so longer stack strings wrap. The
+     value reserves two lines whether it needs them or not, otherwise the
+     horizontal hairlines stop aligning across the row — which on a drafting
+     sheet reads as broken. plan.md §10.1 */
+  .val {
+    display: block;
+    font-size: 14px;
+    margin-top: 5px;
+    line-height: 1.25;
+    min-height: 2.5em;
+    overflow-wrap: anywhere;
+  }
+
+  .card__open {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    border-left: var(--hairline) solid var(--rule);
+  }
+  .card__open:hover { background: var(--ink); color: var(--paper-2); }
+</style>

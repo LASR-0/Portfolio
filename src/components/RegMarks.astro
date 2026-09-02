@@ -1,0 +1,13 @@
+---
+/* ✕ registration marks at section corners. Decorative — aria-hidden, and never
+   announced. plan.md §11.5. Uses --rule, which is legitimate here because
+   these are marks, not text. */
+
+interface Props {
+  corners?: Array<"tl" | "tr" | "bl" | "br">;
+}
+
+const { corners = ["tl", "tr"] } = Astro.props;
+---
+
+{corners.map((c) => <span class:list={["reg", `reg--${c}`]} aria-hidden="true">✕</span>)}

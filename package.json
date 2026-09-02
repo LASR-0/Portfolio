@@ -13,7 +13,7 @@
     "deploy": "astro build && wrangler deploy",
     "astro": "astro",
     "generate-types": "wrangler types",
-    "typecheck": "astro check"
+    "typecheck": "astro sync && astro check"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.2.6",

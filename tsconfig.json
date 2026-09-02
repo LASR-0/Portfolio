@@ -8,8 +8,7 @@
   "exclude": [
     "dist",
     "Prototype",
-    "node_modules",
-    ".astro"
+    "node_modules"
   ],
   "compilerOptions": {
     "jsx": "react-jsx",

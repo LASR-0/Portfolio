@@ -1,0 +1,65 @@
+---
+import RegMarks from "./RegMarks.astro";
+
+/* The ASCII field hydrates as an island in a later commit (plan.md §11.2 —
+   it needs IntersectionObserver + visibilitychange pausing and a 30fps cap
+   before it goes anywhere near a phone). The <pre> is aria-hidden and the
+   lockup reads fine without it. */
+---
+
+<section class="hero">
+  <RegMarks corners={["tl", "tr", "bl", "br"]} />
+  <pre class="hero__field" aria-hidden="true" data-ascii-field></pre>
+  <div class="hero__lockup">
+    <h1 class="hero__name">Luke Roxburgh</h1>
+    <p class="hero__line">Placeholder mono line for now.</p>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    /* dvh, not vh — mobile measures vh against the collapsed address bar and
+       the hero gets clipped. plan.md §11.1 */
+    height: calc(100dvh - var(--header-h));
+    min-height: 620px;
+    border-bottom: var(--hairline) solid var(--rule);
+    overflow: hidden;
+  }
+
+  .hero__field {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    padding: 0;
+    color: var(--graphite);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 13px;
+    white-space: pre;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  .hero__lockup {
+    position: absolute;
+    left: var(--pad-x);
+    right: var(--pad-x);
+    bottom: 64px;
+    z-index: var(--z-raised);
+    pointer-events: none;
+  }
+
+  .hero__name {
+    font-weight: 700;
+    font-size: var(--fs-hero);
+    animation: riseIn var(--dur-rise) 0.5s var(--ease) both;
+  }
+
+  .hero__line {
+    margin: 22px 0 0;
+    max-width: var(--measure);
+    color: var(--graphite);
+    animation: riseIn var(--dur-rise) 0.68s var(--ease) both;
+  }
+</style>

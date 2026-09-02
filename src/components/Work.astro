@@ -1,0 +1,55 @@
+---
+import { getCollection } from "astro:content";
+import RuleBand from "./RuleBand.astro";
+import RegMarks from "./RegMarks.astro";
+import SectionHead from "./SectionHead.astro";
+import ProjectCard from "./ProjectCard.astro";
+
+/* Four columns, so borders land at 25/50/75 and the interior rules at
+   --rule-left / --rule-right sit exactly on two of them. Nothing jogs.
+   plan.md §10.1. Filters are cut until there are six projects — §10.2. */
+
+const projects = (await getCollection("projects", ({ data }) => !data.draft))
+  .sort((a, b) => a.data.order - b.data.order);
+---
+
+<section class="section" id="work">
+  <RegMarks corners={["tl", "tr"]} />
+
+  <RuleBand>
+    <SectionHead num="01" title="Work.">
+      <p class="sechead__aside prose">
+        Internal tools for a 300-user org, plus the things I build for myself.
+        Open one for the detail.
+      </p>
+    </SectionHead>
+  </RuleBand>
+
+  <RuleBand>
+    <div class="work__grid">
+      {projects.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </RuleBand>
+</section>
+
+<style>
+  .work__grid {
+    border-top: var(--hairline) solid var(--rule);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .sechead__aside {
+    margin: 0 0 10px;
+    max-width: 46ch;
+    font-size: 14px;
+    color: var(--graphite);
+  }
+
+  @media (max-width: 1180px) {
+    .work__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .work__grid { grid-template-columns: 1fr; }
+  }
+</style>

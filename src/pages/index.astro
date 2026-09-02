@@ -1,65 +1,19 @@
 ---
 import Base from "../layouts/Base.astro";
-
-// Commit 1 verification sheet. This is NOT the portfolio page — the port lands
-// in commit 2 (plan.md §8). This exists to prove tokens resolve, the two faces
-// self-host, and the rule offsets are live.
-
-const swatches = [
-  ["paper",     "Page base"],
-  ["paper-2",   "Card and cell fills"],
-  ["ink",       "All text"],
-  ["rule",      "Every hairline — never text"],
-  ["vermilion", "Max 3 per viewport"],
-  ["graphite",  "Meta text only"],
-];
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import Work from "../components/Work.astro";
 ---
 
-<Base title="Portfolio — scaffold verification">
-  <main id="main" style="position:relative;max-width:var(--container);margin:0 auto;min-height:100vh">
+<Base title="Luke Roxburgh — IT support and internal-tooling developer">
+  <div class="sheet">
+    <span class="sheet__rule sheet__rule--start" aria-hidden="true"></span>
+    <span class="sheet__rule sheet__rule--end" aria-hidden="true"></span>
 
-    <!-- outer rules (page-level, continuous) + interior rules at the tokens.
-         The band primitive that replaces the interior pair lands in commit 3. -->
-    <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;z-index:var(--z-band-rule)">
-      <div style="position:absolute;top:0;bottom:0;left:0;width:var(--hairline);background:var(--rule);transform-origin:top;animation:ruleDown var(--dur-rule) var(--ease) both"></div>
-      <div style="position:absolute;top:0;bottom:0;left:var(--rule-left);width:var(--hairline);background:var(--rule);transform-origin:top;animation:ruleDown var(--dur-rule) .08s var(--ease) both"></div>
-      <div style="position:absolute;top:0;bottom:0;left:var(--rule-right);width:var(--hairline);background:var(--rule);transform-origin:top;animation:ruleDown var(--dur-rule) .16s var(--ease) both"></div>
-      <div style="position:absolute;top:0;bottom:0;right:0;width:var(--hairline);background:var(--rule);transform-origin:top;animation:ruleDown var(--dur-rule) .24s var(--ease) both"></div>
-    </div>
-
-    <header style="padding:28px var(--pad-x) 20px;border-bottom:var(--hairline) solid var(--rule)">
-      <div style="font-size:var(--fs-meta);color:var(--graphite);letter-spacing:var(--ls-label)">SHEET 00 — SCAFFOLD</div>
-      <h1 style="font-size:var(--fs-section);margin-top:10px">Tokens.</h1>
-    </header>
-
-    <section style="display:grid;grid-template-columns:repeat(6,1fr);border-bottom:var(--hairline) solid var(--rule)">
-      {swatches.map(([name, use]) => (
-        <div style="border-right:var(--hairline) solid var(--rule)">
-          <div style={`height:96px;background:var(--${name});border-bottom:var(--hairline) solid var(--rule)`}></div>
-          <div style="padding:14px 16px">
-            <div style="font-size:var(--fs-prose)">{name}</div>
-            <div style="font-size:var(--fs-meta);color:var(--graphite);margin-top:8px">{use}</div>
-          </div>
-        </div>
-      ))}
-    </section>
-
-    <section style="padding:40px var(--pad-x);border-bottom:var(--hairline) solid var(--rule)">
-      <div style="font-size:var(--fs-label);color:var(--graphite);letter-spacing:var(--ls-label)">DISPLAY 700 / 600 — CHAKRA PETCH</div>
-      <div style="font-family:var(--font-display);font-weight:700;font-size:var(--fs-card);margin-top:12px">Luke Roxburgh</div>
-      <div style="font-family:var(--font-display);font-weight:600;font-size:var(--fs-card)">AssetCheckout</div>
-
-      <div style="font-size:var(--fs-label);color:var(--graphite);letter-spacing:var(--ls-label);margin-top:32px">MONO 400 — JETBRAINS MONO</div>
-      <p style="max-width:var(--measure);margin-top:12px">
-        Mono body, held to fifty-five characters a line. Four lines maximum
-        before the copy is the problem, not the typeface.
-      </p>
-
-      <div style="font-size:var(--fs-meta);color:var(--graphite);margin-top:32px">
-        Interior rules at var(--rule-left) / var(--rule-right) — currently 25% / 75%.
-        Work grid and footer align to these. Three font files requested, not eight.
-      </div>
-    </section>
-
-  </main>
+    <Header />
+    <main id="main">
+      <Hero />
+      <Work />
+    </main>
+  </div>
 </Base>

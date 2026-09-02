@@ -75,3 +75,93 @@ img { max-width: 100%; height: auto; }
     scroll-behavior: auto !important;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   The measured system — plan.md §10.0
+   --------------------------------------------------------------------------- */
+
+.sheet {
+  position: relative;
+  max-width: var(--container);
+  margin: 0 auto;
+}
+
+/* The two OUTER rules stay page-level and continuous, and keep the staggered
+   load animation. Only these animate; band rules never do. */
+.sheet__rule {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--hairline);
+  background: var(--rule);
+  pointer-events: none;
+  transform-origin: top;
+  animation: ruleDown var(--dur-rule) var(--ease) both;
+  /* Needs an explicit z-index: every .band is position:relative and comes
+     later in the DOM, so at z-index:auto the opaque card fills inside a band
+     paint straight over these. Raised components (2) still sit above. */
+  z-index: var(--z-band-rule);
+}
+.sheet__rule--start { left: 0; }
+.sheet__rule--end   { right: 0; animation-delay: 0.24s; }
+
+/* Interior rules, drawn per band, spanning only that band's height. */
+.band { position: relative; }
+.band__rule {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--hairline);
+  background: var(--rule);
+  pointer-events: none;
+  z-index: var(--z-band-rule);
+}
+/* Offset by 1px so the rule lands ON the card border rather than beside it.
+   A 4-col card at 25% occupies up to x=359 and draws border-right on that last
+   pixel; an un-offset rule at exactly 25% sits at x=360, giving a 2px line.
+   In bands with no cards the 1px shift is imperceptible. */
+.band__rule--left  { left: calc(var(--rule-left) - 1px); }
+.band__rule--right { left: calc(var(--rule-right) - 1px); }
+
+/* Opaque components that interrupt the rules and resume them in the gutters
+   either side — plan.md §10.8. */
+.raised {
+  position: relative;
+  z-index: var(--z-raised);
+}
+
+/* Registration marks */
+.reg {
+  position: absolute;
+  font-size: var(--fs-label);
+  color: var(--rule);
+  line-height: 1;
+  z-index: var(--z-raised);
+}
+.reg--tl { top: var(--reg-inset); left: var(--reg-inset); }
+.reg--tr { top: var(--reg-inset); right: var(--reg-inset); }
+.reg--bl { bottom: var(--reg-inset); left: var(--reg-inset); }
+.reg--br { bottom: var(--reg-inset); right: var(--reg-inset); }
+
+/* Section heading band */
+.sechead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 56px var(--pad-x) 28px;
+}
+.sechead__lockup { display: flex; align-items: baseline; gap: 18px; }
+.sechead__num { font-size: 12px; color: var(--graphite); }
+.sechead h2 { font-weight: 600; font-size: var(--fs-section); }
+
+.section { position: relative; border-bottom: var(--hairline) solid var(--rule); }
+.prose { max-width: var(--measure); text-wrap: pretty; }
+
+@media (max-width: 768px) {
+  /* No room for a three-column measured system at this width — forcing one
+     produces exactly the glyph collisions §13.1 forbids. Outer rules and
+     registration marks stay. plan.md §11.1 */
+  .band__rule { display: none; }
+  .sechead { flex-direction: column; align-items: flex-start; gap: 18px; }
+}
