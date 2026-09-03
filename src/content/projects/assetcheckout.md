@@ -3,12 +3,12 @@ name: AssetCheckout
 order: 1
 kind: Internal tools
 status: In production
-live: true
+dot: production
 stack: React / .NET / SQL
 role: Sole developer
 year: "2026"
 metricLabel: USERS
-metric: "~300"
+metric: "100+"
 repo: null
 blurb: Hardware request and checkout for the whole org. Actively developed.
 ---

@@ -66,12 +66,23 @@ img { max-width: 100%; height: auto; }
 @keyframes riseIn   { from { opacity: 0; transform: translateY(10px); }
                       to   { opacity: 1; transform: none; } }
 
+/* Overshoot to 1.25, settle at 1.15 — a pop, not a grow. */
+@keyframes iconPop  { 0%   { transform: scale(1); }
+                      55%  { transform: scale(1.25); }
+                      100% { transform: scale(1.15); } }
+
 /* plan.md §11.3 — the prototype asserted this and never implemented it. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
+    /* Delay must go too. Zeroing only the duration leaves riseIn holding its
+       `from` state — opacity 0 — for the length of the delay, so the hero name
+       and subheading were invisible for half a second to exactly the people
+       who asked for less motion. */
+    animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
     scroll-behavior: auto !important;
   }
 }
@@ -157,6 +168,14 @@ img { max-width: 100%; height: auto; }
   gap: 40px;
   padding: 56px var(--pad-x) 28px;
 }
+/* Narrows the heading band to the same measure as the form below it, so the
+   two line up vertically instead of the heading hanging off the section
+   padding. Mirrors `.form`: max-width 1040 centred. */
+.sechead--constrained {
+  width: min(1040px, 100% - var(--pad-x) * 2);
+  margin-inline: auto;
+  padding-inline: 0;
+}
 .sechead__lockup { display: flex; align-items: baseline; gap: 18px; }
 .sechead__num { font-size: 12px; color: var(--graphite); }
 .sechead h2 { font-weight: 600; font-size: var(--fs-section); }
@@ -176,9 +195,26 @@ img { max-width: 100%; height: auto; }
    scoped style block — Astro scopes styles to elements in its own template and
    an island's DOM never receives the scoping attribute. Island-facing styles
    belong here. */
+/* The colour wash, drawn by HeroField on the same grid as the characters and
+   from the same wave value — so it moves with the field instead of drifting
+   independently behind it. One pixel per cell, stretched and blurred here. */
+.hero__wash {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  /* Enough blur to lose the cell grid, little enough to keep the wave
+     shape legible. */
+  filter: blur(18px) saturate(1.12);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
 .hero__field {
   position: absolute;
   inset: 0;
+  z-index: 1;
   margin: 0;
   padding: 0;
   /* --rule, not --graphite: the field is decorative construction texture, not

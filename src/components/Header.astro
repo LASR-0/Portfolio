@@ -10,11 +10,11 @@
       rule segments at all four offsets. */
 
 const links = [
-  { href: "#work", label: "Work" },
+  { href: "#projects", label: "Projects" },
   { href: "#experience", label: "Experience" },
   { href: "#activity", label: "Activity" },
   { href: "#gallery", label: "Gallery" },
-  { href: "#hobbies", label: "Hobbies" },
+  { href: "#education", label: "Education" },
 ];
 ---
 
@@ -40,10 +40,28 @@ const links = [
     </nav>
   </details>
 
-  <a class="hdr__cta" href="#start">
-    <span class="hdr__cta-long">START A PROJECT</span>
-    <span class="hdr__cta-short">START</span>
-  </a>
+  <div class="hdr__actions">
+    <a class="hdr__icon" href="https://github.com/LASR-0" aria-label="GitHub" rel="me noopener">
+      <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+
+    {/* TODO: no LinkedIn URL yet. Rendered inert rather than pointing at "#",
+        which would be a control that visibly does nothing. */}
+    <span class="hdr__icon hdr__icon--pending" role="img" aria-label="LinkedIn — not yet linked" title="LinkedIn — not yet linked">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+    </span>
+
+    {/* TODO: point at /resume.pdf once the file exists. Until then it takes you
+        to the resume block rather than 404ing on a download. */}
+    <a class="hdr__icon" href="#experience" aria-label="Resume">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"><path d="M12 3v10"/><path d="M8 11l4 4 4-4"/><path d="M4 17v2h16v-2"/></svg>
+    </a>
+
+    <a class="hdr__cta" href="#start">
+      <span class="hdr__cta-long">START A PROJECT</span>
+      <span class="hdr__cta-short">START</span>
+    </a>
+  </div>
 </header>
 
 <style>
@@ -84,6 +102,34 @@ const links = [
   .hdr__meta { font-size: var(--fs-label); color: var(--graphite); }
 
   .hdr__nav { display: flex; gap: 28px; font-size: var(--fs-nav); min-width: 0; }
+
+  /* Icons sit as their own evenly-spaced cluster, with a wider gap before the
+     CTA so the group reads as separate from the button rather than crowding
+     into it. */
+  .hdr__actions { display: flex; align-items: center; gap: 20px; flex-shrink: 0; }
+  .hdr__actions .hdr__cta { margin-left: 8px; }
+
+  /* Softened by default, vermilion on hover. --graphite rather than --rule:
+     these are controls, and --rule measures 1.5:1, well under the 3:1 that
+     non-text UI needs. */
+  .hdr__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    color: var(--graphite);
+    opacity: 0.75;
+  }
+  .hdr__icon svg { width: 100%; height: 100%; display: block; }
+  .hdr__icon:hover, .hdr__icon:focus-visible {
+    color: var(--vermilion);
+    opacity: 1;
+    animation: iconPop 0.28s var(--ease) forwards;
+  }
+  /* Inert until it has somewhere to go. */
+  .hdr__icon--pending { opacity: 0.4; cursor: default; }
+  .hdr__icon--pending:hover { color: var(--graphite); opacity: 0.4; animation: none; }
 
   .hdr__cta {
     flex-shrink: 0;
@@ -135,6 +181,9 @@ const links = [
   /* At 375 the row was name + MENU + a 15-character CTA against 20px padding,
      which overflowed and overlapped. Tighten the gap and shorten the label
      rather than dropping the primary action. plan.md §10.12 */
+  @media (max-width: 760px) { .hdr__actions { gap: 14px; } }
+  /* Icons go first when the row gets tight — the CTA is the primary action. */
+  @media (max-width: 620px) { .hdr__icon { display: none; } }
   @media (max-width: 560px) {
     .hdr { gap: 12px; }
     .hdr__cta { padding: 8px 12px; }

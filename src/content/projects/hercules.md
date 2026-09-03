@@ -3,7 +3,7 @@ name: Hercules App
 order: 4
 kind: Personal
 status: In development
-live: false
+
 stack: Expo / SQLite
 role: Sole developer
 year: "2026"

@@ -10,7 +10,10 @@ const projects = defineCollection({
     order: z.number(),
     kind: z.enum(["Internal tools", "Open source", "Personal"]),
     status: z.string(),
-    live: z.boolean().default(false),
+    /* Drives the status square. null = no square. */
+    dot: z.enum(["production", "active"]).nullable().default(null),
+    /* Small softened line under the status, e.g. "LINUX RELEASE". */
+    note: z.string().nullable().default(null),
     stack: z.string(),
     role: z.string(),
     year: z.string(),

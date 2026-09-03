@@ -16,6 +16,17 @@
   /* `rule` draws lines. `graphite` writes words. See plan.md §11.6 —
      --rule as a text colour measures ~1.5:1 and fails WCAG at every size. */
 
+  /* --- category + status colour ------------------------------------------
+     Solid fills carrying paper-2 text, same treatment as the CTA. All three
+     measured against --paper-2: ink 15.6:1, moss 6.7:1, ochre 7.0:1 — every
+     one clears AA at the 10px the tags are set in. */
+  --tag-internal: #171614;
+  --tag-oss:      #2F5D3A;
+  --tag-personal: #7A4318;
+
+  --status-live:   #E8452B;  /* in production */
+  --status-active: #3F7A45;  /* actively developed, not yet in production */
+
   /* heatmap intensity ramp */
   --heat-0: #F2F0EA;
   --heat-1: #F6C9C0;

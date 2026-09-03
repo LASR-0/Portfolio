@@ -4,14 +4,25 @@ import type { CollectionEntry } from "astro:content";
 interface Props { project: CollectionEntry<"projects">; }
 const { project } = Astro.props;
 const p = project.data;
+
+/* Category tags are solid-filled with paper-2 text, the same treatment as the
+   primary button. See the contrast note in tokens.css. */
+const KIND_CLASS = {
+  "Internal tools": "card__kind--internal",
+  "Open source": "card__kind--oss",
+  "Personal": "card__kind--personal",
+} as const;
 ---
 
 <article class="card">
   <div class="card__head">
-    <span class="card__kind">{p.kind}</span>
-    <span class:list={["card__status", p.live && "card__status--live"]}>
-      {p.live && <span class="card__dot" aria-hidden="true"></span>}
-      {p.status}
+    <span class:list={["card__kind", KIND_CLASS[p.kind]]}>{p.kind}</span>
+    <span class="card__statuswrap">
+      <span class:list={["card__status", p.dot && "card__status--on"]}>
+        {p.dot && <span class:list={["card__dot", `card__dot--${p.dot}`]} aria-hidden="true"></span>}
+        {p.status}
+      </span>
+      {p.note && <span class="card__note">{p.note}</span>}
     </span>
   </div>
 
@@ -48,28 +59,53 @@ const p = project.data;
     justify-content: space-between;
     gap: 10px;
     padding: 12px 16px;
+    /* Reserves the two-line height whether or not this card has a note.
+       Without it, a card carrying one throws the head hairline out of
+       alignment with its neighbours. Same reasoning as .val below. */
+    min-height: 52px;
     border-bottom: var(--hairline) solid var(--rule);
   }
   .card__kind {
-    border: var(--hairline) solid var(--rule);
     padding: 3px 8px;
     font-size: var(--fs-label);
     letter-spacing: var(--ls-label);
-    color: var(--graphite);
+    color: var(--paper-2);
     white-space: nowrap;
+  }
+  .card__kind--internal { background: var(--tag-internal); }
+  .card__kind--oss      { background: var(--tag-oss); }
+  .card__kind--personal { background: var(--tag-personal); }
+  /* Status stacks over its note so the head row stays one line tall when
+     there is no note. */
+  .card__statuswrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 3px;
+    min-width: 0;
   }
   .card__status {
     display: flex;
     align-items: center;
     gap: 7px;
     font-size: var(--fs-label);
+    line-height: 1.2;
     color: var(--graphite);
     white-space: nowrap;
   }
-  .card__status--live { color: var(--ink); }
-  /* The only vermilion in the Work section — one dot, on genuinely
-     in-production work. plan.md §4, max 3 per viewport. */
-  .card__dot { width: 6px; height: 6px; background: var(--vermilion); display: block; }
+  .card__status--on { color: var(--ink); }
+  .card__dot { width: 6px; height: 6px; display: block; }
+  .card__dot--production { background: var(--status-live); }
+  .card__dot--active     { background: var(--status-active); }
+  /* Deliberately softened — reads as secondary to the status above it. */
+  .card__note {
+    font-size: 9px;
+    line-height: 1.2;
+    letter-spacing: var(--ls-label);
+    color: var(--graphite);
+    opacity: 0.7;
+    white-space: nowrap;
+  }
 
   .card__body { padding: 26px 16px 44px; min-height: 150px; }
   .card__title {

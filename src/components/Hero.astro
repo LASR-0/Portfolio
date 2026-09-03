@@ -12,7 +12,7 @@ import HeroField from "./HeroField.tsx";
   <HeroField client:load />
   <div class="hero__lockup">
     <h1 class="hero__name">Luke Roxburgh</h1>
-    <p class="hero__line">Placeholder mono line for now.</p>
+    <p class="hero__line"><span class="hero__line-in">Placeholder mono line for now.</span></p>
   </div>
 </section>
 
@@ -48,4 +48,12 @@ import HeroField from "./HeroField.tsx";
     color: var(--graphite);
     animation: riseIn var(--dur-rise) 0.68s var(--ease) both;
   }
+  /* Boxed so the line stays legible over the field and the colour beneath it. */
+  .hero__line-in {
+    display: inline-block;
+    background: var(--paper-2);
+    border: var(--hairline) solid var(--rule);
+    padding: 5px;
+  }
+
 </style>

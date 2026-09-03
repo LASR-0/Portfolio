@@ -3,7 +3,8 @@ name: Pallet 2.0
 order: 2
 kind: Open source
 status: Active
-live: false
+dot: active
+note: LINUX RELEASE
 stack: Rust / Vite
 role: Maintainer
 year: "2026"

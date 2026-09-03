@@ -1,19 +1,24 @@
 ---
 /* Section heading band. The numbered marker replaces a tracked-out eyebrow —
    plan.md §3. Numbering is only applied where content is genuinely sequential,
-   so `num` is optional: Work / Experience / Activity carry 01-03, Gallery,
-   Hobbies and Start a project do not. */
+   so `num` is optional: Projects / Experience / Activity carry 01-03, Gallery,
+   Education and Start a project do not.
+
+   `constrained` narrows the band to the same measure as the form below it, so
+   the heading lines up with the form's left edge rather than hanging off the
+   section padding. */
 
 interface Props {
   num?: string;
   title: string;
   id?: string;
+  constrained?: boolean;
 }
 
-const { num, title, id } = Astro.props;
+const { num, title, id, constrained = false } = Astro.props;
 ---
 
-<div class="sechead">
+<div class:list={["sechead", constrained && "sechead--constrained"]}>
   <div class="sechead__lockup">
     {num && <span class="sechead__num">{num}</span>}
     <h2 id={id}>{title}</h2>

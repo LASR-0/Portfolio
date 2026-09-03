@@ -1,0 +1,31 @@
+---
+import RuleBand from "./RuleBand.astro";
+import RegMarks from "./RegMarks.astro";
+import SectionHead from "./SectionHead.astro";
+
+/* Title band keeps the RIGHT interior rule; the content band renders outer
+   rules only. plan.md §10.6, amended.
+
+   Content is deliberately absent — the section is being redesigned. The
+   heading and a held band keep the page rhythm and the #education anchor
+   alive in the meantime. */
+---
+
+<section class="section" id="education">
+  <RegMarks corners={["tr"]} />
+
+  <RuleBand rules="right">
+    <SectionHead title="Education." />
+  </RuleBand>
+
+  <RuleBand rules="none">
+    <div class="edu__hold"></div>
+  </RuleBand>
+</section>
+
+<style>
+  .edu__hold {
+    height: 140px;
+    border-top: var(--hairline) solid var(--rule);
+  }
+</style>

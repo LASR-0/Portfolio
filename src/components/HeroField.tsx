@@ -22,10 +22,13 @@ const ASPECT = 0.6;
 
 export default function HeroField() {
   const ref = useRef<HTMLPreElement>(null);
+  const washRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    const wash = washRef.current;
+    if (!el || !wash) return;
+    const wctx = wash.getContext("2d", { alpha: true });
 
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     const mouse = { x: 0.15, y: 0.65 };
@@ -38,6 +41,7 @@ export default function HeroField() {
     let last = 0;
     let visible = true;
     let onscreen = true;
+    let img: ImageData | null = null;
 
     const measure = () => {
       // Bigger cells on narrow viewports: fewer characters to build per frame.
@@ -46,6 +50,13 @@ export default function HeroField() {
       el.style.lineHeight = `${cellH}px`;
       cols = Math.max(20, Math.floor(el.clientWidth / (cellH * ASPECT)));
       rows = Math.max(10, Math.floor(el.clientHeight / cellH));
+
+      /* The colour wash is drawn on the SAME grid as the characters, one pixel
+         per cell, then stretched and blurred by CSS. That is what makes it move
+         with the field rather than beside it — both read the same v below. */
+      wash.width = cols;
+      wash.height = rows;
+      img = wctx ? wctx.createImageData(cols, rows) : null;
     };
 
     const draw = (t: number) => {
@@ -54,6 +65,8 @@ export default function HeroField() {
       const my = (mouse.y - 0.5) * 2;
       const ease = Math.min(1, t / 1.1);
       let out = "";
+      const px32 = img ? img.data : null;
+      let o = 0;
       for (let y = 0; y < rows; y++) {
         const py = (y / rows - 0.5) * 2;
         for (let x = 0; x < cols; x++) {
@@ -65,14 +78,31 @@ export default function HeroField() {
           v += 0.55 * Math.sin(px * 2.4 + t * 0.35) * Math.cos(py * 2.9 - t * 0.28);
           v += 0.28 * Math.sin((px + py) * 5.1 - t * 0.6);
           v *= ease;
-          let i = Math.round((v * 0.5 + 0.5) * (RAMP.length - 1));
+          let n = v * 0.5 + 0.5;
+          if (n < 0) n = 0;
+          if (n > 1) n = 1;
+
+          let i = Math.round(n * (RAMP.length - 1));
           if (i < 0) i = 0;
           if (i > RAMP.length - 1) i = RAMP.length - 1;
           out += RAMP[i];
+
+          if (px32) {
+            /* Deep brown through to vermilion at the crests. Alpha rises as
+               n^3 so troughs stay bare paper and the wave keeps its shape;
+               a flatter curve washes the whole band pink. */
+            const a = n * n * n;
+            px32[o]     = 112 + (232 - 112) * n;
+            px32[o + 1] = 62 + (69 - 62) * n;
+            px32[o + 2] = 28 + (43 - 28) * n;
+            px32[o + 3] = a * 240;
+            o += 4;
+          }
         }
         out += "\n";
       }
       el.textContent = out;
+      if (wctx && img) wctx.putImageData(img, 0, 0);
     };
 
     const loop = (now: number) => {
@@ -147,5 +177,10 @@ export default function HeroField() {
     };
   }, []);
 
-  return <pre ref={ref} className="hero__field" aria-hidden="true" />;
+  return (
+    <>
+      <canvas ref={washRef} className="hero__wash" aria-hidden="true" />
+      <pre ref={ref} className="hero__field" aria-hidden="true" />
+    </>
+  );
 }

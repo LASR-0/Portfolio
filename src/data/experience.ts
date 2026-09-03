@@ -14,7 +14,7 @@ export const roles: Role[] = [
     date: "MAR 2026",
     title: "IT Support Officer",
     org: "KSB Australia",
-    body: "Current. Support for roughly 300 users, and the internal tooling that sits behind it.",
+    body: "Current. Support for 100+ users, and the internal tooling that sits behind it.",
   },
   {
     date: "SEP 2020",

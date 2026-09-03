@@ -8,9 +8,10 @@ import EnquiryForm from "./EnquiryForm.tsx";
 <section class="section" id="start">
   <RegMarks corners={["tl", "tr"]} />
 
-  {/* Title band renders outer rules only — plan.md §10.7 */}
-  <RuleBand rules="none">
-    <SectionHead title="Start a project.">
+  {/* Title band keeps the right interior rule and is constrained to the form's
+      measure so the two line up vertically. plan.md §10.7, amended. */}
+  <RuleBand rules="right">
+    <SectionHead title="Start a project." constrained>
       <div class="form-rev">FORM 01 / REV A</div>
     </SectionHead>
   </RuleBand>

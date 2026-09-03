@@ -13,13 +13,13 @@ const projects = (await getCollection("projects", ({ data }) => !data.draft))
   .sort((a, b) => a.data.order - b.data.order);
 ---
 
-<section class="section" id="work">
+<section class="section" id="projects">
   <RegMarks corners={["tl", "tr"]} />
 
   <RuleBand rules="none">
-    <SectionHead num="01" title="Work.">
+    <SectionHead num="01" title="Projects.">
       <p class="sechead__aside prose">
-        Internal tools for a 300-user org, plus the things I build for myself.
+        Internal tools for a 100+ user org, plus the things I build for myself.
         Open one for the detail.
       </p>
     </SectionHead>
