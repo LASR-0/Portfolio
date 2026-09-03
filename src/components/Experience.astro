@@ -24,9 +24,11 @@ import { roles } from "../data/experience";
           <div class="tl__spine" aria-hidden="true"></div>
           {roles.map((r) => (
             <div class="tl__item">
-              <div class="tl__tick" aria-hidden="true"></div>
-              <div class="tl__date">{r.date}</div>
-              <div class="tl__title">{r.title}</div>
+              <div class="tl__head">
+                <div class="tl__tick" aria-hidden="true"></div>
+                <div class="tl__date">{r.date}</div>
+                <div class="tl__title">{r.title}</div>
+              </div>
               <div class="tl__org">{r.org}</div>
               <p class="tl__body">{r.body}</p>
             </div>
@@ -71,11 +73,12 @@ import { roles } from "../data/experience";
   .tl__spine { position: absolute; left: 88px; top: 6px; bottom: 6px; width: var(--hairline); background: var(--ink); }
   .tl__item { position: relative; padding-bottom: 52px; }
   .tl__item:last-of-type { padding-bottom: 8px; }
-  .tl__tick { position: absolute; left: -16px; top: 7px; width: 17px; height: var(--hairline); background: var(--ink); }
-  .tl__date { position: absolute; left: -96px; top: 0; width: 72px; text-align: right; font-size: var(--fs-meta); color: var(--graphite); }
-  .tl__title { font-family: var(--font-display); font-weight: 600; font-size: 26px; letter-spacing: var(--ls-display); line-height: 1; }
-  .tl__org { font-size: var(--fs-prose); color: var(--graphite); margin-top: 9px; }
-  .tl__body { margin: 12px 0 0; max-width: 50ch; font-size: var(--fs-prose); color: var(--graphite); }
+  .tl__head { position: relative; }
+  .tl__tick { position: absolute; left: -16px; top: 50%; transform: translateY(-50%); width: 17px; height: var(--hairline); background: var(--ink); }
+  .tl__date { position: absolute; left: -96px; top: 50%; transform: translateY(-50%); width: 72px; text-align: right; font-size: var(--fs-meta); color: var(--graphite); line-height: 1; }
+  .tl__title { margin-left: 16px; font-family: var(--font-display); font-weight: 600; font-size: 26px; letter-spacing: var(--ls-display); line-height: 1; }
+  .tl__org { margin-top: 9px; margin-left: 28px; font-size: var(--fs-prose); color: var(--graphite); }
+  .tl__body { margin: 12px 0 0 28px; max-width: 50ch; font-size: var(--fs-prose); color: var(--graphite); }
   .tl__end { position: absolute; left: 85px; bottom: -4px; font-size: var(--fs-label); }
 
   .resume {
