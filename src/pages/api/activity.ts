@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import { env } from "cloudflare:workers";
 
 /* GitHub contribution graph. Token lives in a Worker secret and never reaches
    the bundle. Edge-cached so the GraphQL API is hit at most a few times a day.
@@ -36,9 +37,8 @@ function toLevel(count: number): number {
   return 4;
 }
 
-export const GET: APIRoute = async ({ locals, request }) => {
-  const env = (locals as any)?.runtime?.env ?? {};
-  const token = env.GITHUB_TOKEN;
+export const GET: APIRoute = async ({ request }) => {
+  const token = (env as any).GITHUB_TOKEN;
 
   const cache = (globalThis as any).caches?.default;
   const cacheKey = new Request(new URL(request.url).origin + "/api/activity");

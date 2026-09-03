@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import { env } from "cloudflare:workers";
 
 /* Everything is revalidated here. The client checks in EnquiryForm exist to
    give fast feedback, not to be trusted — the prototype had client-only
@@ -24,9 +25,8 @@ async function verifyTurnstile(secret: string, token: string, ip: string | null)
   return json?.success === true;
 }
 
-export const POST: APIRoute = async ({ request, locals }) => {
-  const env = (locals as any)?.runtime?.env ?? {};
-
+export const POST: APIRoute = async ({ request }) => {
+  const secrets = env as any;
   let data: any;
   try {
     data = await request.json();
@@ -54,16 +54,16 @@ export const POST: APIRoute = async ({ request, locals }) => {
   /* Turnstile is enforced only once a secret is configured, so local dev works
      without one. TODO: the widget still has to be rendered in EnquiryForm and
      its token posted as `turnstileToken` before this does anything. */
-  if (env.TURNSTILE_SECRET) {
+  if (secrets.TURNSTILE_SECRET) {
     const ok = await verifyTurnstile(
-      env.TURNSTILE_SECRET,
+      secrets.TURNSTILE_SECRET,
       String(data.turnstileToken ?? ""),
       request.headers.get("cf-connecting-ip"),
     );
     if (!ok) return bad("Could not verify that request came from a browser.");
   }
 
-  if (!env.RESEND_API_KEY || !env.ENQUIRY_TO) {
+  if (!secrets.RESEND_API_KEY || !secrets.ENQUIRY_TO) {
     // Fail loudly rather than silently dropping a paying client's message.
     return Response.json({ ok: false, error: "Mail is not configured." }, { status: 503 });
   }
@@ -71,12 +71,12 @@ export const POST: APIRoute = async ({ request, locals }) => {
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
-      authorization: `Bearer ${env.RESEND_API_KEY}`,
+      authorization: `Bearer ${secrets.RESEND_API_KEY}`,
       "content-type": "application/json",
     },
     body: JSON.stringify({
-      from: env.ENQUIRY_FROM ?? "portfolio@example.invalid",
-      to: [env.ENQUIRY_TO],
+      from: secrets.ENQUIRY_FROM ?? "portfolio@example.invalid",
+      to: [secrets.ENQUIRY_TO],
       reply_to: email,
       subject: `Enquiry — ${name} — ${type || "unspecified"}`,
       text: [

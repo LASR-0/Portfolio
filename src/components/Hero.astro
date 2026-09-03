@@ -21,8 +21,8 @@ import HeroField from "./HeroField.tsx";
     position: relative;
     /* dvh, not vh — mobile measures vh against the collapsed address bar and
        the hero gets clipped. plan.md §11.1 */
-    height: calc(100dvh - var(--header-h));
-    min-height: 620px;
+    height: calc(50dvh - var(--header-h) / 2);
+    min-height: 340px;
     border-bottom: var(--hairline) solid var(--rule);
     overflow: hidden;
   }
@@ -31,19 +31,19 @@ import HeroField from "./HeroField.tsx";
     position: absolute;
     left: var(--pad-x);
     right: var(--pad-x);
-    bottom: 64px;
+    bottom: 32px;
     z-index: var(--z-raised);
     pointer-events: none;
   }
 
   .hero__name {
     font-weight: 700;
-    font-size: var(--fs-hero);
+    font-size: clamp(44px, 9vw, 130px);
     animation: riseIn var(--dur-rise) 0.5s var(--ease) both;
   }
 
   .hero__line {
-    margin: 22px 0 0;
+    margin: 14px 0 0;
     max-width: var(--measure);
     color: var(--graphite);
     animation: riseIn var(--dur-rise) 0.68s var(--ease) both;
