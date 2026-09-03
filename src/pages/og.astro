@@ -1,0 +1,110 @@
+---
+/* Source for public/og.png — the social card. plan.md §11.4
+
+   Rendered here rather than drawn by hand so it uses the real tokens and the
+   real faces. To regenerate after a change:
+
+     pnpm build && npx serve dist/client   (or any static server)
+     chromium --headless --window-size=1200,630 \
+       --screenshot=public/og.png http://localhost:PORT/og/
+
+   noindex, and excluded from the sitemap in astro.config.mjs. */
+import "../styles/global.css";
+---
+
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <meta charset="utf-8" />
+    <title>OG card source</title>
+    <meta name="robots" content="noindex, nofollow" />
+  </head>
+  <body>
+    <div class="og">
+      <span class="og__rule og__rule--l" aria-hidden="true"></span>
+      <span class="og__rule og__rule--r" aria-hidden="true"></span>
+
+      <span class="og__reg og__reg--tl" aria-hidden="true">✕</span>
+      <span class="og__reg og__reg--tr" aria-hidden="true">✕</span>
+      <span class="og__reg og__reg--bl" aria-hidden="true">✕</span>
+      <span class="og__reg og__reg--br" aria-hidden="true">✕</span>
+
+      <div class="og__top">PORTFOLIO</div>
+
+      <div class="og__body">
+        <h1 class="og__name">Luke Roxburgh</h1>
+        <p class="og__line">
+          IT support and internal-tooling developer. Brisbane, AU.
+        </p>
+      </div>
+
+      <div class="og__foot">
+        <span>BNE / UTC+10</span>
+        <span>SHEET 01 / REV A</span>
+      </div>
+    </div>
+
+    <style is:global>
+      body { margin: 0; }
+      .og {
+        position: relative;
+        width: 1200px;
+        height: 630px;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: var(--font-mono);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 40px 56px;
+        box-sizing: border-box;
+      }
+      .og__rule {
+        position: absolute; top: 0; bottom: 0; width: 1px;
+        background: var(--rule);
+      }
+      /* Outer rules only. This card is a hero, and the hero band drops its
+         interior rules so nothing crosses the name — plan.md §10.3. With them
+         in, the 132px name ran straight through both. */
+      .og__rule--l  { left: 0; }
+      .og__rule--r  { right: 0; }
+
+      .og__reg { position: absolute; font-size: 14px; color: var(--rule); line-height: 1; }
+      .og__reg--tl { top: 14px; left: 14px; }
+      .og__reg--tr { top: 14px; right: 14px; }
+      .og__reg--bl { bottom: 14px; left: 14px; }
+      .og__reg--br { bottom: 14px; right: 14px; }
+
+      .og__top {
+        font-size: 15px;
+        letter-spacing: 0.06em;
+        color: var(--graphite);
+        position: relative;
+      }
+      .og__body { position: relative; }
+      .og__name {
+        margin: 0;
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 132px;
+        line-height: 0.9;
+        letter-spacing: -0.03em;
+      }
+      .og__line {
+        margin: 26px 0 0;
+        font-size: 25px;
+        line-height: 1.5;
+        color: var(--graphite);
+      }
+      .og__foot {
+        display: flex;
+        justify-content: space-between;
+        font-size: 15px;
+        letter-spacing: 0.06em;
+        color: var(--graphite);
+        position: relative;
+      }
+    </style>
+  </body>
+</html>

@@ -48,7 +48,7 @@ Do not reopen these without asking.
 | **Host** | Cloudflare Workers with static assets, `@astrojs/cloudflare` |
 | **Domain** | `.dev` primary. `.com` registered defensively and 301'd to it |
 | **GitHub** | `LASR-0` — this is the handle, everywhere |
-| **Case studies** | Real routes at `/work/[slug]`, opening as a drawer on in-page nav |
+| **Case studies** | Real routes at `/work/[slug]`. **No drawer** — see §5 |
 | **Launch projects** | AssetCheckout, Pallet 2.0, Canopy, Hercules App — four, no placeholders |
 | **Work grid** | 4 columns |
 | **Interior rules** | 25% / 75% |
@@ -174,29 +174,33 @@ Islands, in ascending cost:
 
 | Island | Directive | Notes |
 |---|---|---|
-| `EnquiryForm` | `client:visible` | Form state ports from `renderVals()` |
-| `Lightbox` | `client:visible` | Gallery modal |
-| `CaseDrawer` | `client:visible` | See below |
+| `EnquiryForm` | `client:visible` | Form state, validation, submit |
 | `HeroField` | `client:load` | The rAF ASCII loop. See 11.2 |
+
+The drawer and lightbox islands were dropped — see below. The Activity heatmap
+is **not** an island: it is 364 static cells with no interactivity, so a plain
+script patches the data in rather than paying to hydrate them.
 
 Everything else — header, section headings, Work cards, Experience timeline,
 heatmap markup, Hobbies, footer — is `.astro` and ships no JavaScript.
 
-### Case studies: routes and drawer
+### Case studies: full pages, no drawer
 
-`/work/[slug]` is a real server-rendered page reading from the same content
-collection the drawer reads. In-page clicks open the drawer and call
-`history.pushState('/work/pallet')`; Escape and the back button pop it. Direct
-hits, crawlers and pasted links get the page.
+`/work/[slug]` is one dynamic template reading from the content collection —
+one file, `getStaticPaths`, not a hand-made page per project.
 
-Do **not** build this on Astro's `<ClientRouter>` / view transitions. The
-pushState approach has no dependency on transition behaviour and degrades
-correctly with JS off.
+**Revision B specified an in-page drawer with `history.pushState`. That is
+dropped.** Each project gets a full page instead, designed properly, because
+the content will be heavy: screenshots of project UIs and probably embedded
+video of the tooling in use. A 620px drawer is the wrong container for that.
+The gallery gets the same treatment — its own page rather than a lightbox.
 
-At this revision the page renders the drawer's content in the existing design
-language and nothing more. Its richer template is deferred — see section 14.
-**Build the plumbing now regardless.** The data model and pushState wiring are
-the parts that are expensive to retrofit; the visual richness is not.
+Both designs are deferred until the content exists (§14). The template and its
+data plumbing already ship; what is deferred is how the page looks.
+
+The z-index tokens for a drawer and lightbox remain in `tokens.css` and are
+currently unused. Leave them: the modal layering is still the reference for
+anything that ever sits above the sticky header.
 
 ## 6. Repo
 
@@ -271,8 +275,8 @@ Small commits, tested in a browser before each push.
 6. Per-component z-index raises (10.8).
 7. Resume meta-line fix (10.9). Rename Off the clock → Hobbies (10.10).
 8. Sticky nav and nav sizing (10.11, 10.12).
-9. Islands: hero field with the lifecycle fixes (11.2), lightbox, form.
-10. `work/[slug]` routes and drawer pushState plumbing.
+9. Islands: hero field with the lifecycle fixes (11.2), enquiry form.
+10. `work/[slug]` routes.
 11. Mobile (11.1).
 12. `/api/activity` and `/api/enquiry`.
 13. SEO, OG image, analytics, 404 (11.4).
@@ -391,10 +395,30 @@ than no ARIA at all; if it ever comes back it should be toggle buttons with
 The `SHOWING n / 6` cell may stay as a static count if the row looks empty
 without it — that's a judgment call once it's on screen.
 
+### 10.2b Every section title band drops its interior rules
+
+Applied after revision B was written, and it supersedes the per-section
+treatment below wherever the two disagree. **No section heading band renders
+interior rules** — Work, Experience, Activity and Gallery joined Hobbies and
+Start a project, which already did.
+
+The rules run through the dense content bands, break at every heading, and
+resume below. That reads as sheet divisions rather than as an interruption,
+and it removes the last places where a rule crossed heading text or the aside
+paragraph beside it.
+
 ### 10.3 Hero — remove both interior rules
 
 The hero band renders outer rules only. ✕ registration marks at all four corners
 stay. The ASCII field and the name lockup are unaffected.
+
+**The hero is a half-viewport band**, not a full one: `calc(50dvh -
+var(--header-h) / 2)`, `min-height: 340px`, with `--fs-hero` at
+`clamp(44px, 9vw, 130px)`. Revision B assumed a full viewport; it does not.
+
+The ASCII field is drawn in `--rule`, not `--graphite` — it is construction
+texture, and at graphite it competed with the lockup sitting over it and the
+subheading became unreadable.
 
 *Verify:* nothing crosses the ASCII field or the `Luke Roxburgh` headline.
 
@@ -512,7 +536,8 @@ elements stay in normal flow, so that stays valid — but re-measure if the head
 height changes in 10.12, and switch `100vh` to `100dvh` (see 11.1).
 
 *Verify:* header stays put through a full scroll; opening the lightbox covers it
-completely; hero fills exactly one viewport with no scrollbar at load.
+completely; the hero band occupies half the viewport exactly, with no
+scrollbar at load.
 
 ### 10.12 Fix the overflowing nav
 
@@ -614,8 +639,9 @@ none of them exist yet:
   prototype — this is 0% built, not partially built.
 - **Focus returns** to the triggering element on close. The case drawer needs
   `role="dialog"` and `aria-modal`.
-- **The lightbox has no close button** and no keyboard path out. Closing on
-  click-anywhere is not an accessible affordance on its own.
+- ~~The lightbox has no close button~~ — dropped with the lightbox. Whatever
+  the gallery page uses instead must not repeat it: click-anywhere-to-close is
+  not an accessible affordance on its own.
 - **The heatmap is 364 `<div>`s carrying `title` attributes.** `title` is not an
   accessible name and this is invisible to screen readers. Give the grid
   `role="img"` with a summarising `aria-label`, or render a visually-hidden
@@ -635,7 +661,8 @@ comfortably at every size they're used. **Don't spend time there.**
 
 The actual failure is **`rule` (`#C4BFB2`) used as a text colour, at ~1.5:1**:
 
-- `CLICK ANYWHERE TO CLOSE` in the lightbox — a real instruction, unreadable.
+- `CLICK ANYWHERE TO CLOSE` in the lightbox — gone with the lightbox, but the
+  lesson stands for the gallery page.
 - `titleColor: "#C4BFB2"` on empty project cards at 34px, which fails even the
   3:1 large-text threshold. Those cards are cut anyway, but if any "coming soon"
   state survives it uses `graphite`.
@@ -690,8 +717,11 @@ Rule of thumb going in: **`rule` draws lines. `graphite` writes words.**
 
 **Explicitly deferred by Luke**, to be picked up in order:
 
-1. **Case-study page template.** The richer design for `/work/[slug]`. The
-   routes and data plumbing ship in this revision; the template does not.
+1. **Case-study page design, and a gallery page.** Both to be designed once the
+   content exists — project pages will carry UI screenshots and probably
+   embedded video. The `/work/[slug]` template and its data plumbing already
+   ship; only the design is outstanding. Gallery tiles are non-interactive
+   until that page exists, rather than shipping a control that goes nowhere.
 2. **Real project content.** Blurbs, metrics, case-study bodies for
    AssetCheckout, Pallet 2.0, Canopy and Hercules App.
 3. **Assets.** Resume PDF, gallery images, LinkedIn URL, the two hobby

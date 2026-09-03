@@ -31,6 +31,26 @@ pnpm preview    # wrangler dev, against the real Workers runtime
 pnpm deploy     # build + wrangler deploy
 ```
 
+## Metadata and the social card
+
+`site` in `astro.config.mjs` drives every absolute URL — canonical links, the
+sitemap, and `og:image`. **It is currently a placeholder** (`lukeroxburgh.dev`,
+not yet registered); confirm it before launch. Without it Astro resolves
+`Astro.url` against localhost and the production build ships
+`<link rel="canonical" href="http://localhost:4321/">`.
+
+`public/og.png` is generated from the `/og` route so it uses the real tokens
+and faces rather than being drawn by hand. To regenerate after a change:
+
+```bash
+pnpm build
+cd dist/client && python3 -m http.server 8099 &
+chromium --headless --window-size=1200,630 \
+  --screenshot=public/og.png http://localhost:8099/og/
+```
+
+That route is `noindex` and excluded from the sitemap.
+
 ## Secrets
 
 Never committed — this repo is public.
@@ -54,6 +74,12 @@ src/
   pages/       index, work/[slug], api/
   styles/      tokens.css is the single source of truth
 ```
+
+## Read this before changing anything
+
+**[`Docs/plan.md`](Docs/plan.md)** — design direction, locked decisions, the
+rule-band mechanism, and acceptance criteria. `plan-revA.md` is the superseded
+first pass, kept for the reasoning only.
 
 ## Conventions
 

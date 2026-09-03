@@ -40,7 +40,7 @@
   --font-display: "Chakra Petch", ui-sans-serif, system-ui, sans-serif;
   --font-mono:    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  --fs-hero:      clamp(72px, 15.5vw, 224px);
+  --fs-hero:      clamp(44px, 9vw, 130px);   /* half-height hero — see Hero.astro */
   --fs-section:   112px;  /* overridden at breakpoints — plan.md §11.1 */
   --fs-card:      34px;
   --fs-body:      15px;
