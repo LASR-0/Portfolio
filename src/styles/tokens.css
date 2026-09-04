@@ -8,24 +8,44 @@
   /* --- colour ------------------------------------------------------------ */
   --paper:      #EAE7DE;  /* page base */
   --paper-2:    #F2F0EA;  /* card and cell fills */
+  --paper-dark: #e3dfd6;  /* hero band — one step below paper */
+
+  /* Hero field character colour. The band is inverted: a darker paper ground
+     with the characters lifted off it, rather than darker marks on paper.
+     Swap to #FFFFFF for the brighter variant. */
+  --hero-field: var(--paper);
   --ink:        #171614;  /* all text — warm near-black, never #000 */
   --rule:       #C4BFB2;  /* every hairline, grid line, registration mark */
-  --vermilion:  #E8452B;  /* the single accent — max 3 per viewport */
+  --vermilion:  #ff9900;  /* the single accent — max 3 per viewport */
+
+  /* The hero wash ramps from this to --vermilion at the crests. HeroField
+     reads both at mount, so retuning the accent moves the wash with it. */
+  --wash-trough: #703E1C;
   --graphite:   #5C5850;  /* secondary and meta text only */
 
   /* `rule` draws lines. `graphite` writes words. See plan.md §11.6 —
      --rule as a text colour measures ~1.5:1 and fails WCAG at every size. */
 
   /* --- category + status colour ------------------------------------------
-     Solid fills carrying paper-2 text, same treatment as the CTA. All three
-     measured against --paper-2: ink 15.6:1, moss 6.7:1, ochre 7.0:1 — every
-     one clears AA at the 10px the tags are set in. */
-  --tag-internal: #171614;
-  --tag-oss:      #2F5D3A;
-  --tag-personal: #7A4318;
+     Solid fills carrying paper-2 text, same treatment as the CTA. Measured
+     against --paper-2: purple 6.7:1, green 4.5:1, red 4.5:1 — every one clears
+     AA at the 10px the tags are set in, which is normal-size text and so needs
+     4.5, not the 3.0 that large text would.
+
+     The green and red are darkened from #12c03a and #de0a2a: at those values
+     they measured 2.1:1 and 4.4:1, so the green in particular was unreadable.
+     Hue and saturation are unchanged — only lightness moved. */
+  --tag-desktop:  #0c7f27;
+  --tag-internal: #5e21e0;
+  --tag-mobile:   #db0a29;
+
+  /* Licence badge. Outlined rather than filled, so it reads as a marker on the
+     card rather than competing with the solid category tag opposite it. */
+  --lic-open:    #0c7f27;
+  --lic-private: #5C5850;
 
   --status-live:   #E8452B;  /* in production */
-  --status-active: #3F7A45;  /* actively developed, not yet in production */
+  --status-active: #17cd29;  /* actively developed, not yet in production */
 
   /* heatmap intensity ramp */
   --heat-0: #F2F0EA;

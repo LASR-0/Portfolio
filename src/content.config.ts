@@ -8,7 +8,7 @@ const projects = defineCollection({
   schema: z.object({
     name: z.string(),
     order: z.number(),
-    kind: z.enum(["Internal tools", "Open source", "Personal"]),
+    kind: z.enum(["Desktop App", "Internal tools", "Mobile App"]),
     status: z.string(),
     /* Drives the status square. null = no square. */
     dot: z.enum(["production", "active"]).nullable().default(null),
@@ -17,8 +17,11 @@ const projects = defineCollection({
     stack: z.string(),
     role: z.string(),
     year: z.string(),
-    metricLabel: z.string(),
-    metric: z.string(),
+    /* The foot cell is always LICENCE, so only the value varies. licence
+       also drives the corner badge — open source projects get one, private
+       ones say so. */
+    licence: z.string(),
+    licenceType: z.enum(["open", "private"]),
     blurb: z.string(),
     /* null = private repo. Drives the card's secondary affordance. */
     repo: z.url().nullable().default(null),

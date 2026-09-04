@@ -217,11 +217,11 @@ img { max-width: 100%; height: auto; }
   z-index: 1;
   margin: 0;
   padding: 0;
-  /* --rule, not --graphite: the field is decorative construction texture, not
-     text. At graphite it competed with the lockup sitting over it and the
-     subline became unreadable. This is the "rule draws lines" rule (§11.6)
-     applying to the field itself. */
-  color: var(--rule);
+  /* The field is decorative construction texture, not text, so it stays low
+     contrast against its ground — previously --rule on paper, now lifted off
+     the darker band instead. Same reasoning as §11.6, inverted: it must not
+     compete with the lockup sitting over it. */
+  color: var(--hero-field);
   font-family: var(--font-mono);
   font-size: 13px;
   line-height: 13px;

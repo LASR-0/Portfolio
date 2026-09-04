@@ -1,17 +1,17 @@
 ---
 name: Pallet 2.0
 order: 2
-kind: Open source
+kind: Desktop App
 status: Active
 dot: active
 note: LINUX RELEASE
 stack: Rust / Vite
-role: Maintainer
+role: Sole developer
 year: "2026"
-metricLabel: LICENSE
-metric: MIT
 repo: https://github.com/LASR-0/pallet
 blurb: Desktop colour picker and palette manager. Capture, pick, export.
+licence: MIT
+licenceType: open
 ---
 
 <!-- TODO content. Frontmatter is derived from Pallet/Cargo.toml — a Rust

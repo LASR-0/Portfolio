@@ -1,16 +1,16 @@
 ---
 name: Hercules App
 order: 4
-kind: Personal
+kind: Mobile App
 status: In development
 
 stack: Expo / SQLite
 role: Sole developer
 year: "2026"
-metricLabel: PLATFORM
-metric: Mobile
 repo: null
 blurb: Local-first mobile app. Everything stays on the device.
+licence: All rights reserved
+licenceType: private
 ---
 
 <!-- TODO content. Frontmatter derived from Hercules-App/package.json — Expo

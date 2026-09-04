@@ -5,12 +5,12 @@ kind: Internal tools
 status: In production
 dot: production
 stack: React / .NET / SQL
-role: Sole developer
+role: Lead developer
 year: "2026"
-metricLabel: USERS
-metric: "100+"
-repo: null
+repo: https://github.com/LASR-0/AssetCheckout
 blurb: Hardware request and checkout for the whole org. Actively developed.
+licence: MIT
+licenceType: open
 ---
 
 <!-- TODO content: carried from the prototype, not yet confirmed as accurate.

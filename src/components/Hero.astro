@@ -23,6 +23,9 @@ import HeroField from "./HeroField.tsx";
        against the collapsed address bar and the hero gets clipped. §11.1 */
     height: calc(50dvh - var(--header-h) / 2);
     min-height: 340px;
+    /* The band sits a step below page paper so the field can read as light
+       marks lifted off it rather than dark marks on it. */
+    background: var(--paper-dark);
     border-bottom: var(--hairline) solid var(--rule);
     overflow: hidden;
   }
